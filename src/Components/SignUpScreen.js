@@ -31,6 +31,18 @@ export default function SignUpScreen () {
             setLoading(false);
             return;
         }
+        if (name.length < 1) {
+            alert("O campo 'Nome' deve ser preenchido");
+            setDisabled(false);
+            setLoading(false);
+            return;
+        }
+        if (email.length < 1) {
+            alert("Preencha o campo 'E-mail' corretamente");
+            setDisabled(false);
+            setLoading(false);
+            return;
+        }
         if (password.length <= 3) {
             alert("Sua senha é curta demais. Por favor digite uma senha com pelo menos 4 caracteres");
             setDisabled(false);
