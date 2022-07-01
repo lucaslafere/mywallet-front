@@ -50,14 +50,14 @@ export default function LoginScreen() {
                 <Input
                     placeholder="E-mail" type="email" autoComplete="email" disabled={disabled} value={email} onChange={e => setEmail(e.target.value)} />
                 <Input
-                    placeholder="Senha" type="password" autoComplete="password" disabled={disabled} value={password} onChange={e => setPassword(e.target.value)} />
+                    placeholder="Senha" type="password" autoComplete="current-password" disabled={disabled} value={password} onChange={e => setPassword(e.target.value)} />
                 <Button
-                disabled={disabled}
-                type="submit" >
+                    disabled={disabled}
+                    type="submit" >
                     {loading ? <ThreeDots color="#fff" height={80} width={80} /> : "Entrar"}
                 </Button>
             </Form>
-            <Link to={`/sign-up`}>
+            <Link to={"/sign-up"}>
                 <TextLink>Primeira vez? Cadastre-se!</TextLink>
             </Link>
         </Container>
@@ -96,7 +96,7 @@ align-items: center;
 width: 90%;
 height: 58px;
 border-radius: 6px;
-border: 1px solid #FFF;
+border: ${props => props.disabled? "1px solid #d69bef" : "1px solid #FFF"};
 padding: 1rem;
 opacity: ${props => props.disabled ? 0.7 : 1};
 background-color: ${props => props.disabled ? '#d69bef' : '#fff'};
@@ -139,3 +139,4 @@ font-weight: 700;
 font-size: 1rem;
 color: #FFFFFF;
 `
+export { Container, MyWallet, Form, Input, Button, TextLink };
