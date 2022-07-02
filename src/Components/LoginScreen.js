@@ -4,7 +4,6 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { ThreeDots } from 'react-loader-spinner';
 import TokenContext from '../Contexts/TokenContext';
-import NameContext from '../Contexts/NameContext';
 
 export default function LoginScreen() {
     const [disabled, setDisabled] = useState(false);
@@ -15,7 +14,6 @@ export default function LoginScreen() {
     const navigate = useNavigate();
 
     const { setToken } = useContext(TokenContext);
-    const { setName } = useContext(NameContext);
 
     const body = {
         email,
@@ -26,11 +24,14 @@ export default function LoginScreen() {
         event.preventDefault();
         setDisabled(true);
         setLoading(true);
+        requestLogin();
 
+    }
+
+    function requestLogin() {
         axios.post(URL, body)
             .then((res) => {
                 setToken(res.data.token);
-                setName(res.data.name);
                 setLoading(false);
                 navigate("/receipts");
             })
@@ -96,7 +97,7 @@ align-items: center;
 width: 90%;
 height: 58px;
 border-radius: 6px;
-border: ${props => props.disabled? "1px solid #d69bef" : "1px solid #FFF"};
+border: ${props => props.disabled ? "1px solid #d69bef" : "1px solid #FFF"};
 padding: 1rem;
 opacity: ${props => props.disabled ? 0.7 : 1};
 background-color: ${props => props.disabled ? '#d69bef' : '#fff'};

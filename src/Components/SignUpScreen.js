@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ThreeDots } from 'react-loader-spinner';
 import { Container, MyWallet, Form, Input, Button, TextLink } from "./LoginScreen";
 
-export default function SignUpScreen () {
+export default function SignUpScreen() {
     const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
@@ -13,7 +13,7 @@ export default function SignUpScreen () {
     const [name, setName] = useState("");
     const URL = "http://localhost:5000/sign-up";
     const navigate = useNavigate();
-    
+
     const body = {
         email,
         name,
@@ -21,10 +21,14 @@ export default function SignUpScreen () {
         confirmPassword
     }
 
-    function signUp (event) {
+    function signUp(event) {
         event.preventDefault();
         setDisabled(true);
         setLoading(true);
+        signUpSchema();
+    }
+
+    function signUpSchema() {
         if (password !== confirmPassword) {
             alert("As senhas digitadas são diferentes!");
             setDisabled(false);
@@ -56,20 +60,19 @@ export default function SignUpScreen () {
             return;
         }
         else {
-        axios.post(URL, body)
-            .then(() => {
-                setLoading(false);
-                alert("Sua conta foi criada com sucesso!")
-                navigate("/");
-            })
-            .catch(err => {
-                alert(err);
-                setLoading(false);
-                setDisabled(false);
-            })
+            axios.post(URL, body)
+                .then(() => {
+                    setLoading(false);
+                    alert("Sua conta foi criada com sucesso!")
+                    navigate("/");
+                })
+                .catch(err => {
+                    alert(err);
+                    setLoading(false);
+                    setDisabled(false);
+                })
         }
     }
-
     return (
         <Container>
             <MyWallet>
@@ -97,3 +100,4 @@ export default function SignUpScreen () {
     )
 
 }
+
