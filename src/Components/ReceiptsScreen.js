@@ -37,12 +37,34 @@ export default function ReceiptsScreen () {
                 <h2>Não há registros de entrada ou saída</h2>
             )
         }
-        //  else {
-        //     return receiptsData.map((el, index) => <Receipt key={index} value={el.value} date={el.date} description={el.description} type={el.type} /> )
-        // }
+         else {
+            return (
+                receiptsData.map((el, index) => 
+            <ReceiptDateDescription key={index} date={el.date} description={el.description} value={el.value} type={el.type}>
+                <Line type={el.type}>
+                    <li>{el.date} {el.description} </li>
+                    <span type={el.type} value={el.value}>
+                        {el.type === "debt" ? <h2>-{el.value}</h2> : <h2>{el.value}</h2>}
+                    </span>
+                </Line>
+            </ReceiptDateDescription>, calculateBalance()) 
+            
+        )};
+        }
+    let balance = 0;
+    function calculateBalance () {
+        for (let i = 0; i < receiptsData.length; i++) {
+            if (receiptsData[i].type === "debt"){
+                balance -= Number(receiptsData[i].value)
+            }
+            else if (receiptsData[i].type === "credit") {
+                balance += Number(receiptsData[i].value)
+            }
+        }
     }
 
     useEffect(() => getReceipts(), []);
+    useEffect(() => calculateBalance(), [])
     const renderReceipts = mountReceipts();
 
     return (
@@ -52,9 +74,11 @@ export default function ReceiptsScreen () {
                 <ion-icon name="exit-outline"></ion-icon>
             </NameHeader>
             <ReceiptsContainer receiptsData={receiptsData}>
-                {renderReceipts}
-                <Balance>
-                    {receiptsData.length === 0 ? "" : <h4>Saldo</h4>}
+                <ReceiptsList>
+                        {renderReceipts}
+                </ReceiptsList>
+                <Balance balance={balance}>
+                    {receiptsData.length === 0 ? "" : <span>SALDO <h3>{balance}</h3></span>}
                 </Balance>
             </ReceiptsContainer>
             <ContainerRequest>
@@ -110,8 +134,8 @@ border-radius: 6px;
 border: 1px solid #fff;
 display: flex;
 flex-direction: column;
-gap: 1rem;
-justify-content: ${props => props.receiptsData.length === 0 ? "center" : "flex-start"};
+padding: 0.4rem;
+justify-content: ${props => props.receiptsData.length === 0 ? "center" : "space-between"};
     h2{
     font-family: 'Raleway', sans-serif;
     font-style: normal;
@@ -120,9 +144,7 @@ justify-content: ${props => props.receiptsData.length === 0 ? "center" : "flex-s
     text-align: center;
     color: #868686;
     }
-:last-child {
-    margin-top: 90px;
-}
+
 `
 const Balance = styled.div`
 display: flex;
@@ -138,6 +160,15 @@ font-weight: 700;
 font-size: 1rem;
 line-height: 20px;
 color: #000000;
+
+span {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+h3 {
+    color: ${props => props.balance > 0 ? "#03AC00" : "#C70000"};
+}
 `
 
 const ContainerRequest = styled.div`
@@ -173,5 +204,39 @@ ion-icon {
     }
 span {
     width: 20%;
+}
+`
+const ReceiptDateDescription = styled.div`
+display: flex;
+align-items: center;
+justify-content: space-between;
+width: 100%;
+height: 20px;
+line-height: 20px;
+font-family: 'Raleway', sans-serif;
+font-style: normal;
+font-weight: 400;
+font-size: 1rem;
+color: #000000;
+span {
+    color: ${props => props.type === "debt" ? "#C70000" : "#03AC00"};
+}
+`
+const ReceiptsList = styled.ul`
+width: 100%;
+padding: 0.6rem;
+display: flex;
+flex-direction: column;
+gap: 0.5rem;
+`
+const Line = styled.div`
+display: flex;
+justify-content: space-between;
+width: 100%;
+span {
+    color: ${props => props.type === "debt" ? "#C70000" : "#03AC00"};
+}
+h2 {
+    color: ${props => props.type === "debt" ? "#C70000" : "#03AC00"};
 }
 `
