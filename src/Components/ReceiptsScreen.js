@@ -78,18 +78,22 @@ export default function ReceiptsScreen () {
                         {renderReceipts}
                 </ReceiptsList>
                 <Balance balance={balance}>
-                    {receiptsData.length === 0 ? "" : <span>SALDO <h3>{balance}</h3></span>}
+                    {receiptsData.length === 0 ? "" : <span>SALDO <h3>{balance.toFixed(2)}</h3></span>}
                 </Balance>
             </ReceiptsContainer>
             <ContainerRequest>
-                <NewRequest>
-                    <ion-icon name="add-circle-outline"></ion-icon>
-                    <span>Nova entrada</span>
-                </NewRequest>
-                <NewRequest>
-                    <ion-icon name="remove-circle-outline"></ion-icon>
-                    <span>Nova saída</span>
-                </NewRequest>
+                <Link to="/new-credit" style={{width: '48%', height: '100%'}}>
+                    <NewRequest>
+                        <ion-icon name="add-circle-outline"></ion-icon>
+                        <span>Nova entrada</span>
+                    </NewRequest>
+                </Link>
+                <Link to={"/new-debt"} style={{width: '48%', height: '100%'}}>
+                    <NewRequest>
+                        <ion-icon name="remove-circle-outline"></ion-icon>
+                        <span>Nova saída</span>
+                    </NewRequest>
+                </Link>
             </ContainerRequest>
         </Container>
     )
@@ -168,6 +172,11 @@ span {
 }
 h3 {
     color: ${props => props.balance > 0 ? "#03AC00" : "#C70000"};
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 1.3rem;
+    line-height: 20px;
 }
 `
 
@@ -181,7 +190,7 @@ align-items: center;
 
 const NewRequest = styled.div`
 height: 100%;
-width: 48%;
+width: 100%;
 display: flex;
 flex-direction: column;
 justify-content: space-between;
