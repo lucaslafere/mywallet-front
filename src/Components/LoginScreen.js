@@ -10,7 +10,7 @@ export default function LoginScreen() {
     const [loading, setLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const URL = "http://localhost:5000/login";
+    const URL = "https://my-wallet-lucaslafere.herokuapp.com/login";
     const navigate = useNavigate();
 
     const { setToken } = useContext(TokenContext);

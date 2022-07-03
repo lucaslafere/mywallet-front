@@ -10,7 +10,7 @@ export default function NewCreditScreen () {
     const [loading, setLoading] = useState(false);
     const [description, setDescription] = useState("");
     const [value, setValue] = useState("");
-    const URL = "http://localhost:5000/newCredit";
+    const URL = "https://my-wallet-lucaslafere.herokuapp.com/newCredit";
     const navigate = useNavigate();
 
     const { token } = useContext(TokenContext)

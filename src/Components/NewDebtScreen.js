@@ -10,7 +10,7 @@ export default function NewDebtScreen () {
     const [loading, setLoading] = useState(false);
     const [description, setDescription] = useState("");
     const [value, setValue] = useState("");
-    const URL = "http://localhost:5000/newDebt";
+    const URL = "https://my-wallet-lucaslafere.herokuapp.com/newDebt";
     const navigate = useNavigate();
 
     const { token } = useContext(TokenContext)

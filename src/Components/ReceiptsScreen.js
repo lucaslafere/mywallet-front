@@ -18,13 +18,14 @@ export default function ReceiptsScreen () {
             Authorization: `Bearer ${token}`
         }
     };
-    const receiptsURL = "http://localhost:5000/receipts";
+    const receiptsURL = "https://my-wallet-lucaslafere.herokuapp.com/receipts";
 
     function getReceipts () {
         axios.get(receiptsURL, config)
             .then(res => {
                 setReceiptsData(res.data.receipts);
                 setName(res.data.name);
+                console.logo(res.data);
             })
             .catch(err => {
                 console.log(err);

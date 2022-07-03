@@ -11,7 +11,7 @@ export default function SignUpScreen() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [name, setName] = useState("");
-    const URL = "http://localhost:5000/sign-up";
+    const URL = "https://my-wallet-lucaslafere.herokuapp.com/sign-up";
     const navigate = useNavigate();
 
     const body = {
