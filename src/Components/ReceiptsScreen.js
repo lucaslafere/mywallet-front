@@ -25,7 +25,6 @@ export default function ReceiptsScreen () {
             .then(res => {
                 setReceiptsData(res.data.receipts);
                 setName(res.data.name);
-                console.logo(res.data);
             })
             .catch(err => {
                 console.log(err);
