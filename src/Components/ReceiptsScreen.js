@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
 import TokenContext from '../Contexts/TokenContext';
@@ -7,7 +7,7 @@ import NameContext from '../Contexts/NameContext';
 
 export default function ReceiptsScreen() {
     const [receiptsData, setReceiptsData] = useState([]);
-    const { token } = useContext(TokenContext);
+    const { token, setToken } = useContext(TokenContext);
     const { name, setName } = useContext(NameContext);
     const config = {
         headers: {
@@ -15,6 +15,7 @@ export default function ReceiptsScreen() {
         }
     };
     const receiptsURL = "https://my-wallet-lucaslafere.herokuapp.com/receipts";
+    const navigate = useNavigate();
 
     function getReceipts() {
         axios.get(receiptsURL, config)
@@ -65,11 +66,16 @@ export default function ReceiptsScreen() {
     useEffect(() => calculateBalance(), [])
     const renderReceipts = mountReceipts();
 
+    function logout () {
+        setToken("");
+        navigate("/");
+    }
+
     return (
         <Container>
             <NameHeader>
                 <h1>Olá, {name}</h1>
-                <ion-icon name="exit-outline"></ion-icon>
+                <ion-icon name="exit-outline" onClick={() => logout()}></ion-icon>
             </NameHeader>
             <ReceiptsContainer receiptsData={receiptsData}>
                 <ReceiptsList>
