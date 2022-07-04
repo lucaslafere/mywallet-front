@@ -1,16 +1,12 @@
-import { useState, useContext, useEffect} from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState, useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
-import { ThreeDots } from 'react-loader-spinner';
 import TokenContext from '../Contexts/TokenContext';
-import NameContext from '../Contexts/NameContext'; 
+import NameContext from '../Contexts/NameContext';
 
-export default function ReceiptsScreen () {
-    const [disabled, setDisabled] = useState(false);
-    const [loading, setLoading] = useState(false);
+export default function ReceiptsScreen() {
     const [receiptsData, setReceiptsData] = useState([]);
-    const navigate = useNavigate();
     const { token } = useContext(TokenContext);
     const { name, setName } = useContext(NameContext);
     const config = {
@@ -20,7 +16,7 @@ export default function ReceiptsScreen () {
     };
     const receiptsURL = "https://my-wallet-lucaslafere.herokuapp.com/receipts";
 
-    function getReceipts () {
+    function getReceipts() {
         axios.get(receiptsURL, config)
             .then(res => {
                 setReceiptsData(res.data.receipts);
@@ -31,30 +27,32 @@ export default function ReceiptsScreen () {
             })
     }
 
-    function mountReceipts () {
+    function mountReceipts() {
         if (receiptsData.length === 0) {
             return (
                 <h2>Não há registros de entrada ou saída</h2>
             )
         }
-         else {
+        else {
             return (
-                receiptsData.map((el, index) => 
-            <ReceiptDateDescription key={index} date={el.date} description={el.description} value={el.value} type={el.type}>
-                <Line type={el.type}>
-                    <li>{el.date} {el.description} </li>
-                    <span type={el.type} value={el.value}>
-                        {el.type === "debt" ? <h2>-{el.value}</h2> : <h2>{el.value}</h2>}
-                    </span>
-                </Line>
-            </ReceiptDateDescription>, calculateBalance()) 
-            
-        )};
-        }
+                receiptsData.map((el, index) =>
+                    <ReceiptDateDescription key={index} date={el.date} description={el.description} value={el.value} type={el.type}>
+                        <Line type={el.type}>
+                            <li>{el.date} {el.description} </li>
+                            <span type={el.type} value={el.value}>
+                                {el.type === "debt" ? <h2>R$ -{el.value}</h2>
+                                    : <h2>R$ {el.value}</h2>}
+                            </span>
+                        </Line>
+                    </ReceiptDateDescription>, calculateBalance())
+
+            )
+        };
+    }
     let balance = 0;
-    function calculateBalance () {
+    function calculateBalance() {
         for (let i = 0; i < receiptsData.length; i++) {
-            if (receiptsData[i].type === "debt"){
+            if (receiptsData[i].type === "debt") {
                 balance -= Number(receiptsData[i].value)
             }
             else if (receiptsData[i].type === "credit") {
@@ -75,20 +73,20 @@ export default function ReceiptsScreen () {
             </NameHeader>
             <ReceiptsContainer receiptsData={receiptsData}>
                 <ReceiptsList>
-                        {renderReceipts}
+                    {renderReceipts}
                 </ReceiptsList>
                 <Balance balance={balance}>
                     {receiptsData.length === 0 ? "" : <span>SALDO <h3>{balance.toFixed(2)}</h3></span>}
                 </Balance>
             </ReceiptsContainer>
             <ContainerRequest>
-                <Link to="/new-credit" style={{width: '48%', height: '100%'}}>
+                <Link to="/new-credit" style={{ width: '48%', height: '100%' }}>
                     <NewRequest>
                         <ion-icon name="add-circle-outline"></ion-icon>
                         <span>Nova entrada</span>
                     </NewRequest>
                 </Link>
-                <Link to={"/new-debt"} style={{width: '48%', height: '100%'}}>
+                <Link to={"/new-debt"} style={{ width: '48%', height: '100%' }}>
                     <NewRequest>
                         <ion-icon name="remove-circle-outline"></ion-icon>
                         <span>Nova saída</span>
@@ -144,7 +142,7 @@ justify-content: ${props => props.receiptsData.length === 0 ? "center" : "space-
     font-family: 'Raleway', sans-serif;
     font-style: normal;
     font-weight: 400;
-    font-size: 1.2rem;
+    font-size: 1rem;
     text-align: center;
     color: #868686;
     }

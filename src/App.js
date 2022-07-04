@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 import LoginScreen from './Components/LoginScreen';
-import NewPostScreen from './Components/NewCreditScreen';
 import ReceiptsScreen from './Components/ReceiptsScreen';
 import SignUpScreen from './Components/SignUpScreen';
 import TokenContext from './Contexts/TokenContext';

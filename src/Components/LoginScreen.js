@@ -8,6 +8,8 @@ import TokenContext from '../Contexts/TokenContext';
 export default function LoginScreen() {
     const [disabled, setDisabled] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
+    const [errorText, setErrorText] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const URL = "https://my-wallet-lucaslafere.herokuapp.com/login";
@@ -35,38 +37,79 @@ export default function LoginScreen() {
                 setLoading(false);
                 navigate("/receipts");
             })
-            .catch(err => {
-                alert(err);
+            .catch(() => {
                 setDisabled(false);
                 setLoading(false);
+                setErrorText("não foi possível logar. Verifique seus dados e tente novamente, ou crie uma conta nova")
+                setError(true);
             })
     }
 
+    function openModal() {
+        if (error) {
+            return (
+                <ContainerModal onClick={() => setError(false)}>
+                    <h5>Houve um erro: {errorText}</h5>
+                    <h5>Clique em qualquer lugar da caixa para retornar</h5>
+                </ContainerModal>
+            )
+        }
+    }
+
+    const openError = openModal();
+
     return (
-        <Container>
-            <MyWallet>
-                <h1>MyWallet</h1>
-            </MyWallet>
-            <Form onSubmit={login} >
-                <Input
-                    placeholder="E-mail" type="email" autoComplete="email" disabled={disabled} value={email} onChange={e => setEmail(e.target.value)} />
-                <Input
-                    placeholder="Senha" type="password" autoComplete="current-password" disabled={disabled} value={password} onChange={e => setPassword(e.target.value)} />
-                <Button
-                    disabled={disabled}
-                    type="submit" >
-                    {loading ? <ThreeDots color="#fff" height={80} width={80} /> : "Entrar"}
-                </Button>
-            </Form>
-            <Link to={"/sign-up"}>
-                <TextLink>Primeira vez? Cadastre-se!</TextLink>
-            </Link>
-        </Container>
+        <>
+            {error ? openError : null}
+            <Container error={error}>
+                <MyWallet>
+                    <h1>MyWallet</h1>
+                </MyWallet>
+                <Form onSubmit={login} >
+                    <Input
+                        placeholder="E-mail" type="email" autoComplete="email" disabled={disabled} value={email} onChange={e => setEmail(e.target.value)} />
+                    <Input
+                        placeholder="Senha" type="password" autoComplete="current-password" disabled={disabled} value={password} onChange={e => setPassword(e.target.value)} />
+                    <Button
+                        disabled={disabled}
+                        type="submit" >
+                        {loading ? <ThreeDots color="#fff" height={80} width={80} /> : "Entrar"}
+                    </Button>
+                </Form>
+                <Link to={"/sign-up"}>
+                    <TextLink>Primeira vez? Cadastre-se!</TextLink>
+                </Link>
+            </Container>
+
+
+        </>
     )
-
-
-
 }
+
+
+const ContainerModal = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+width: 90%;
+height: 50%;
+background-color: #A329D6;
+border-radius: 12px;
+z-index: 1;
+position: fixed;
+top: 25vh;
+left: 5vw;
+
+h5{
+    font-family: 'Raleway', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: #FFFFFF;
+    text-align: center;
+}
+`
 
 const Container = styled.div`
 display: flex;
@@ -140,4 +183,4 @@ font-weight: 700;
 font-size: 1rem;
 color: #FFFFFF;
 `
-export { Container, MyWallet, Form, Input, Button, TextLink };
+export { Container, MyWallet, Form, Input, Button, TextLink, ContainerModal };
