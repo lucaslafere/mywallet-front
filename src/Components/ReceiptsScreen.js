@@ -4,9 +4,15 @@ import axios from 'axios';
 import styled from 'styled-components';
 import TokenContext from '../Contexts/TokenContext';
 import NameContext from '../Contexts/NameContext';
+import { ContainerModal } from "./LoginScreen";
 
 export default function ReceiptsScreen() {
     const [receiptsData, setReceiptsData] = useState([]);
+    const [registerData, setRegisterData] = useState({
+        value: 0,
+        description: "",
+        type: ""
+    })
     const { token, setToken } = useContext(TokenContext);
     const { name, setName } = useContext(NameContext);
     const config = {
@@ -14,6 +20,7 @@ export default function ReceiptsScreen() {
             Authorization: `Bearer ${token}`
         }
     };
+    const [confirm, setConfirm] = useState(false);
     const receiptsURL = "https://my-wallet-lucaslafere.herokuapp.com/receipts";
     const navigate = useNavigate();
 
@@ -27,6 +34,22 @@ export default function ReceiptsScreen() {
                 console.log(err);
             })
     }
+    function deleteRegister () {
+        const DELETE_URL = "https://my-wallet-lucaslafere.herokuapp.com/delete-register";
+        const DELETE_BODY = registerData;
+        console.log(DELETE_BODY)
+        console.log(config)
+        axios.delete(DELETE_URL, DELETE_BODY, config)
+        .then ((res) => {
+            console.log(res.data)
+            console.log("deu bom")
+        })
+        .catch ((err) => {
+            console.log(err)
+            console.log("deu erro")
+        })
+    }
+
 
     function mountReceipts() {
         if (receiptsData.length === 0) {
@@ -43,6 +66,10 @@ export default function ReceiptsScreen() {
                             <span type={el.type} value={el.value}>
                                 {el.type === "debt" ? <h2>R$ -{el.value}</h2>
                                     : <h2>R$ {el.value}</h2>}
+                                    <ion-icon name="close-outline" onClick={() => {
+                                        setRegisterData({value: el.value, description: el.description, type: el.type})
+                                        setConfirm(true)
+                                    }}></ion-icon>
                             </span>
                         </Line>
                     </ReceiptDateDescription>, calculateBalance())
@@ -50,6 +77,19 @@ export default function ReceiptsScreen() {
             )
         };
     }
+
+    function openModal() {
+        if (confirm) {
+            return (
+                <ContainerModal>
+                    <h5>Deseja mesmo apagar esse registro?</h5>
+                    <h5 onClick={deleteRegister}>Sim</h5>
+                    <h5>Cancelar</h5>
+                </ContainerModal>
+            )
+        }
+    }
+    const openConfirm = openModal();
     let balance = 0;
     function calculateBalance() {
         for (let i = 0; i < receiptsData.length; i++) {
@@ -72,6 +112,8 @@ export default function ReceiptsScreen() {
     }
 
     return (
+        <>
+        {confirm ? openConfirm : null}
         <Container>
             <NameHeader>
                 <h1>Olá, {name}</h1>
@@ -100,6 +142,7 @@ export default function ReceiptsScreen() {
                 </Link>
             </ContainerRequest>
         </Container>
+        </>
     )
 
 }
