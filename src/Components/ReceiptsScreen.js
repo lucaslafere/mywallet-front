@@ -45,6 +45,7 @@ export default function ReceiptsScreen() {
       .post(delete_url, delete_body, config)
       .then((res) => {
         console.log("deu bom");
+        setConfirm(false);
       })
       .catch((err) => {
         console.log("deu erro");
@@ -121,6 +122,7 @@ export default function ReceiptsScreen() {
   }
 
   useEffect(() => getReceipts(), []);
+  useEffect(() => getReceipts(), [confirm]);
   useEffect(() => calculateBalance(), []);
   const renderReceipts = mountReceipts();
 
