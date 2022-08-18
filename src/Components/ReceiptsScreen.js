@@ -76,7 +76,9 @@ export default function ReceiptsScreen() {
                 ) : (
                   <h2>R$ {el.value}</h2>
                 )}
-                <ion-icon
+                
+              </span>
+              <ion-icon
                   name="close-outline"
                   onClick={() => {
                     setRegisterData({
@@ -87,7 +89,6 @@ export default function ReceiptsScreen() {
                     setConfirm(true);
                   }}
                 ></ion-icon>
-              </span>
             </Line>
           </ReceiptDateDescription>
         ),
@@ -314,6 +315,7 @@ const Line = styled.div`
   width: 100%;
   span {
     color: ${(props) => (props.type === "debt" ? "#C70000" : "#03AC00")};
+    margin-right: -110px;
   }
   h2 {
     color: ${(props) => (props.type === "debt" ? "#C70000" : "#03AC00")};

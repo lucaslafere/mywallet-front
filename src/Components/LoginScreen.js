@@ -113,7 +113,7 @@ h6 {
     font-family: 'Raleway', sans-serif;
     font-style: normal;
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 2rem;
     color: green;
     text-align: center;
     margin-top: 10px;
