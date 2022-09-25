@@ -1,4 +1,4 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import styled from 'styled-components';
@@ -15,7 +15,7 @@ export default function LoginScreen() {
     const URL = "https://my-wallet-lucaslafere.herokuapp.com/login";
     const navigate = useNavigate();
 
-    const { setToken } = useContext(TokenContext);
+    const { setToken, token } = useContext(TokenContext);
 
     const body = {
         email,
@@ -29,6 +29,7 @@ export default function LoginScreen() {
         requestLogin();
 
     }
+
 
     function requestLogin() {
         axios.post(URL, body)
