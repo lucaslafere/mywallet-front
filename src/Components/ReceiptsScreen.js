@@ -1,9 +1,9 @@
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
 import styled from "styled-components";
-import TokenContext from "../Contexts/TokenContext";
 import NameContext from "../Contexts/NameContext";
+import TokenContext from "../Contexts/TokenContext";
+import api from "../Services/api";
 import { ContainerModal } from "./LoginScreen";
 
 export default function ReceiptsScreen() {
@@ -21,12 +21,11 @@ export default function ReceiptsScreen() {
     },
   };
   const [confirm, setConfirm] = useState(false);
-  const receiptsURL = "https://my-wallet-api.netlify.app/receipts";
   const navigate = useNavigate();
 
   function getReceipts() {
-    axios
-      .get(receiptsURL, config)
+    api
+      .get("/receipts", config)
       .then((res) => {
         setReceiptsData(res.data.receipts);
         setName(res.data.name);
@@ -36,20 +35,18 @@ export default function ReceiptsScreen() {
       });
   }
   function deleteRegister() {
-    const delete_url =
-      "https://my-wallet-api.netlify.app/delete-register";
     const delete_body = registerData;
     console.log(delete_body);
     console.log(config);
-    const promise = axios
-      .post(delete_url, delete_body, config)
+    const promise = api
+      .post("/delete-register", delete_body, config)
       .then((res) => {
         console.log("deu bom");
         setConfirm(false);
       })
       .catch((err) => {
         console.log("deu erro");
-        console.log(promise)
+        console.log(promise);
       });
   }
 
@@ -64,20 +61,21 @@ export default function ReceiptsScreen() {
             date={el.date}
             description={el.description}
             value={el.value}
-            type={el.type}
-          >
+            type={el.type}>
             <Line type={el.type}>
               <li>
                 {el.date} {el.description}{" "}
               </li>
-              <span type={el.type} value={el.value}>
+              <span
+                type={el.type}
+                value={el.value}>
                 {el.type === "debt" ? (
                   <h2>R$ -{el.value}</h2>
                 ) : (
                   <h2>R$ {el.value}</h2>
                 )}
                 <ion-icon
-                  name="close-outline"
+                  name='close-outline'
                   onClick={() => {
                     setRegisterData({
                       value: el.value,
@@ -85,10 +83,8 @@ export default function ReceiptsScreen() {
                       type: el.type,
                     });
                     setConfirm(true);
-                  }}
-                ></ion-icon>
+                  }}></ion-icon>
               </span>
-              
             </Line>
           </ReceiptDateDescription>
         ),
@@ -138,7 +134,9 @@ export default function ReceiptsScreen() {
       <Container>
         <NameHeader>
           <h1>Olá, {name}</h1>
-          <ion-icon name="exit-outline" onClick={() => logout()}></ion-icon>
+          <ion-icon
+            name='exit-outline'
+            onClick={() => logout()}></ion-icon>
         </NameHeader>
         <ReceiptsContainer receiptsData={receiptsData}>
           <ReceiptsList>{renderReceipts}</ReceiptsList>
@@ -153,15 +151,19 @@ export default function ReceiptsScreen() {
           </Balance>
         </ReceiptsContainer>
         <ContainerRequest>
-          <Link to="/new-credit" style={{ width: "48%", height: "100%" }}>
+          <Link
+            to='/new-credit'
+            style={{ width: "48%", height: "100%" }}>
             <NewRequest>
-              <ion-icon name="add-circle-outline"></ion-icon>
+              <ion-icon name='add-circle-outline'></ion-icon>
               <span>Nova entrada</span>
             </NewRequest>
           </Link>
-          <Link to={"/new-debt"} style={{ width: "48%", height: "100%" }}>
+          <Link
+            to={"/new-debt"}
+            style={{ width: "48%", height: "100%" }}>
             <NewRequest>
-              <ion-icon name="remove-circle-outline"></ion-icon>
+              <ion-icon name='remove-circle-outline'></ion-icon>
               <span>Nova saída</span>
             </NewRequest>
           </Link>

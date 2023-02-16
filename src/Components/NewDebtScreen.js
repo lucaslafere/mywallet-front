@@ -1,174 +1,189 @@
-import { useState, useContext } from "react";
-import axios from "axios";
-import { useNavigate } from 'react-router-dom';
+import { useContext, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
-import styled from 'styled-components';
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 import TokenContext from "../Contexts/TokenContext";
 import { ContainerModal } from "./LoginScreen";
+import api from "../Services/api";
 
 export default function NewDebtScreen() {
-    const [disabled, setDisabled] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(false);
-    const [errorText, setErrorText] = useState("");
-    const [description, setDescription] = useState("");
-    const [value, setValue] = useState("");
-    const URL = "https://my-wallet-api.netlify.app/newDebt";
-    const navigate = useNavigate();
+  const [disabled, setDisabled] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [errorText, setErrorText] = useState("");
+  const [description, setDescription] = useState("");
+  const [value, setValue] = useState("");
+  const navigate = useNavigate();
 
-    const { token } = useContext(TokenContext)
+  const { token } = useContext(TokenContext);
 
-    const body = {
-        description,
-        value
+  const body = {
+    description,
+    value,
+  };
+  const config = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
+  function postNewDebt(event) {
+    event.preventDefault();
+    setDisabled(true);
+    setLoading(true);
+    newDebtSchema();
+  }
+
+  function newDebtSchema() {
+    if (description.length > 18) {
+      setDisabled(false);
+      setLoading(false);
+      setErrorText("sua descriçao não pode ter mais que 18 caracteres");
+      setError(true);
+      return;
     }
-    const config = {
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    };
-
-    function postNewDebt(event) {
-        event.preventDefault();
-        setDisabled(true);
-        setLoading(true);
-        newDebtSchema();
+    if (description.length < 1) {
+      setDisabled(false);
+      setLoading(false);
+      setErrorText("deve haver uma descrição");
+      setError(true);
+      return;
     }
-
-    function newDebtSchema() {
-        if (description.length > 18) {
-            setDisabled(false);
-            setLoading(false);
-            setErrorText("sua descriçao não pode ter mais que 18 caracteres")
-            setError(true);
-            return;
-        }
-        if (description.length < 1) {
-            setDisabled(false);
-            setLoading(false);
-            setErrorText("deve haver uma descrição")
-            setError(true);
-            return;
-        }
-        if (value <= 0) {
-            setDisabled(false);
-            setLoading(false);
-            setErrorText("o campo valor deve ser maior que 0")
-            setError(true);
-            return;
-        }
-        else {
-            axios.post(URL, body, config)
-                .then(() => {
-                    setLoading(false);
-                    navigate("/receipts");
-                })
-        }
+    if (value <= 0) {
+      setDisabled(false);
+      setLoading(false);
+      setErrorText("o campo valor deve ser maior que 0");
+      setError(true);
+      return;
+    } else {
+      api.post("/newDebt", body, config).then(() => {
+        setLoading(false);
+        navigate("/receipts");
+      });
     }
-    function openModal() {
-        if (error) {
-            return (
-                <ContainerModal onClick={() => setError(false)}>
-                    <h5>Houve um erro: {errorText}</h5>
-                    <h5>Clique em qualquer lugar da caixa para retornar</h5>
-                </ContainerModal>
-            )
-        }
+  }
+  function openModal() {
+    if (error) {
+      return (
+        <ContainerModal onClick={() => setError(false)}>
+          <h5>Houve um erro: {errorText}</h5>
+          <h5>Clique em qualquer lugar da caixa para retornar</h5>
+        </ContainerModal>
+      );
     }
+  }
 
-    const openError = openModal();
-    return (
-        <>
-            {error ? openError : null}
-            <Container>
-                <Title >
-                    <h1>Nova saída</h1>
-                </Title>
-                <Form onSubmit={postNewDebt} >
-                    <Input
-                        placeholder="Valor" type="number" autoComplete="off" disabled={disabled} value={value} onChange={e => setValue(e.target.value)} />
-                    <Input
-                        placeholder="Descrição" type="text" autoComplete="off" disabled={disabled} value={description} onChange={e => setDescription(e.target.value)} />
-                    <Button
-                        disabled={disabled}
-                        type="submit" >
-                        {loading ? <ThreeDots color="#fff" height={80} width={80} /> : "Salvar saída"}
-                    </Button>
-                </Form>
-            </Container>
-        </>
-    )
+  const openError = openModal();
+  return (
+    <>
+      {error ? openError : null}
+      <Container>
+        <Title>
+          <h1>Nova saída</h1>
+        </Title>
+        <Form onSubmit={postNewDebt}>
+          <Input
+            placeholder='Valor'
+            type='number'
+            autoComplete='off'
+            disabled={disabled}
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <Input
+            placeholder='Descrição'
+            type='text'
+            autoComplete='off'
+            disabled={disabled}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <Button
+            disabled={disabled}
+            type='submit'>
+            {loading ? (
+              <ThreeDots
+                color='#fff'
+                height={80}
+                width={80}
+              />
+            ) : (
+              "Salvar saída"
+            )}
+          </Button>
+        </Form>
+      </Container>
+    </>
+  );
 }
 
 const Container = styled.div`
-display: flex;
-justify-content: flex-start;
-align-items: flex-start;
-flex-direction: column;
-height: 100vh;
-background-color: #8C12BE;
-padding: 1.5rem;
-`
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-direction: column;
+  height: 100vh;
+  background-color: #8c12be;
+  padding: 1.5rem;
+`;
 const Title = styled.div`
-width: 100%;
-height: 32px;
-font-family: 'Raleway', sans-serif;
-font-style: normal;
-font-weight: 700;
-font-size: 26px;
-line-height: 32px;
-margin-bottom: 40px;
-color: #FFFFFF;
-
-`
+  width: 100%;
+  height: 32px;
+  font-family: "Raleway", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 26px;
+  line-height: 32px;
+  margin-bottom: 40px;
+  color: #ffffff;
+`;
 
 const Form = styled.form`
-display: flex;
-flex-direction: column;
-align-items: center;
-width: 100%;
-gap: 0.8rem;
-margin-bottom: 2rem;
-`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+`;
 const Input = styled.input`
-display: flex;
-align-items: center;
-width: 90%;
-height: 58px;
-border-radius: 6px;
-border: ${props => props.disabled ? "1px solid #d69bef" : "1px solid #FFF"};
-padding: 1rem;
-opacity: ${props => props.disabled ? 0.7 : 1};
-background-color: ${props => props.disabled ? '#d69bef' : '#fff'};
-font-family: 'Raleway', sans-serif;
-font-style: normal;
-font-weight: 500;
-font-size: 1.2rem;
-color: #000000;
-::placeholder{
-font-size: 1.2rem;
-color: ${props => props.disabled ? '#afafaf' : '#000000'};
-font-family: 'Raleway', sans-serif;
-font-style: normal;
-font-weight: 500;
-}
-
-
-`
+  display: flex;
+  align-items: center;
+  width: 90%;
+  height: 58px;
+  border-radius: 6px;
+  border: ${(props) =>
+    props.disabled ? "1px solid #d69bef" : "1px solid #FFF"};
+  padding: 1rem;
+  opacity: ${(props) => (props.disabled ? 0.7 : 1)};
+  background-color: ${(props) => (props.disabled ? "#d69bef" : "#fff")};
+  font-family: "Raleway", sans-serif;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 1.2rem;
+  color: #000000;
+  ::placeholder {
+    font-size: 1.2rem;
+    color: ${(props) => (props.disabled ? "#afafaf" : "#000000")};
+    font-family: "Raleway", sans-serif;
+    font-style: normal;
+    font-weight: 500;
+  }
+`;
 const Button = styled.button`
-display: flex;
-align-items: center;
-justify-content: center;
-width: 90%;
-height: 50px;
-border-radius: 6px;
-border: 1px solid #A329D6;
-background-color: #A329D6;
-padding: 1rem;
-opacity: ${props => props.disabled ? 0.7 : 1};
-font-family: 'Raleway', sans-serif;
-font-style: normal;
-font-weight: 700;
-font-size: 1.2rem;
-color: #FFFFFF;
-`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 50px;
+  border-radius: 6px;
+  border: 1px solid #a329d6;
+  background-color: #a329d6;
+  padding: 1rem;
+  opacity: ${(props) => (props.disabled ? 0.7 : 1)};
+  font-family: "Raleway", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #ffffff;
+`;

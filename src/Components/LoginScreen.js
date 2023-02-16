@@ -1,9 +1,9 @@
-import axios from "axios";
 import { useContext, useState } from "react";
 import { ThreeDots } from "react-loader-spinner";
 import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import TokenContext from "../Contexts/TokenContext";
+import api from "../Services/api";
 
 export default function LoginScreen() {
   const [disabled, setDisabled] = useState(false);
@@ -12,8 +12,6 @@ export default function LoginScreen() {
   const [errorText, setErrorText] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const deployUrl = "https://my-wallet-api.netlify.app/login";
-  const URL = "http://localhost:4000/login";
   const navigate = useNavigate();
 
   const { setToken } = useContext(TokenContext);
@@ -31,8 +29,8 @@ export default function LoginScreen() {
   }
 
   function requestLogin() {
-    axios
-      .post(URL, body)
+    api
+      .post("/login", body)
       .then((res) => {
         setToken(res.data.token);
         setLoading(false);

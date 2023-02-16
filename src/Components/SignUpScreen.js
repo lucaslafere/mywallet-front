@@ -1,15 +1,15 @@
 import { useState } from "react";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
 import { ThreeDots } from "react-loader-spinner";
+import { Link, useNavigate } from "react-router-dom";
+import api from "../Services/api";
 import {
+  Button,
   Container,
-  MyWallet,
+  ContainerModal,
   Form,
   Input,
-  Button,
+  MyWallet,
   TextLink,
-  ContainerModal,
 } from "./LoginScreen";
 
 export default function SignUpScreen() {
@@ -21,8 +21,6 @@ export default function SignUpScreen() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
-  const deployUrl = "https://my-wallet-api.netlify.app/sign-up";
-  const URL = "http://localhost:4000/sign-up";
   const navigate = useNavigate();
 
   const body = {
@@ -76,8 +74,8 @@ export default function SignUpScreen() {
       setError(true);
       return;
     } else {
-      axios
-        .post(URL, body)
+      api
+        .post("/sign-up", body)
         .then(() => {
           setLoading(false);
           navigate("/");
