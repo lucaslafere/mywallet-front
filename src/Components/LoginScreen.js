@@ -12,7 +12,7 @@ export default function LoginScreen() {
     const [errorText, setErrorText] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const URL = "https://my-wallet-lucaslafere.herokuapp.com/login";
+    const URL = "https://my-wallet-api.netlify.app/login";
     const navigate = useNavigate();
 
     const { setToken, token } = useContext(TokenContext);
