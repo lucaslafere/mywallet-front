@@ -21,7 +21,7 @@ export default function ReceiptsScreen() {
     },
   };
   const [confirm, setConfirm] = useState(false);
-  const receiptsURL = "https://my-wallet-lucaslafere.herokuapp.com/receipts";
+  const receiptsURL = "https://my-wallet-api.netlify.app/receipts";
   const navigate = useNavigate();
 
   function getReceipts() {
@@ -37,7 +37,7 @@ export default function ReceiptsScreen() {
   }
   function deleteRegister() {
     const delete_url =
-      "https://my-wallet-lucaslafere.herokuapp.com/delete-register";
+      "https://my-wallet-api.netlify.app/delete-register";
     const delete_body = registerData;
     console.log(delete_body);
     console.log(config);
