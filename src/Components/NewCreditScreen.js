@@ -14,7 +14,7 @@ export default function NewCreditScreen() {
     const [errorText, setErrorText] = useState("");
     const [description, setDescription] = useState("");
     const [value, setValue] = useState("");
-    const URL = "https://my-wallet-lucaslafere.herokuapp.com/newCredit";
+    const URL = "https://my-wallet-api.netlify.app/newCredit";
     const navigate = useNavigate();
 
     const { token } = useContext(TokenContext)
