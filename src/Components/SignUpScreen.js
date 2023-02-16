@@ -13,7 +13,7 @@ export default function SignUpScreen() {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [name, setName] = useState("");
-    const URL = "https://my-wallet-lucaslafere.herokuapp.com/sign-up";
+    const URL = "https://my-wallet-api.netlify.app/sign-up";
     const navigate = useNavigate();
 
 
