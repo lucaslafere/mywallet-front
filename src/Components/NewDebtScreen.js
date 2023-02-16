@@ -13,7 +13,7 @@ export default function NewDebtScreen() {
     const [errorText, setErrorText] = useState("");
     const [description, setDescription] = useState("");
     const [value, setValue] = useState("");
-    const URL = "https://my-wallet-lucaslafere.herokuapp.com/newDebt";
+    const URL = "https://my-wallet-api.netlify.app/newDebt";
     const navigate = useNavigate();
 
     const { token } = useContext(TokenContext)
