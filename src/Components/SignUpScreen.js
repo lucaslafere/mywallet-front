@@ -83,7 +83,9 @@ export default function SignUpScreen() {
         .catch((err) => {
           setLoading(false);
           setDisabled(false);
-          setErrorText("não foi possível criar sua conta, falha no servidor");
+          setErrorText(
+            "não foi possível criar sua conta, erro no servidor:" + err
+          );
           setError(true);
         });
     }
