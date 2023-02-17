@@ -202,6 +202,7 @@ const Button = styled.button`
   font-weight: 700;
   font-size: 1.2rem;
   color: #ffffff;
+  cursor: pointer;
 `;
 const TextLink = styled.div`
   font-family: "Raleway", sans-serif;
